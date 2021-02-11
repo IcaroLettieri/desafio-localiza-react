@@ -3,7 +3,12 @@ import faker from 'faker';
 import { NowRequest, NowResponse } from '@vercel/node';
 import salt from '../../constants/salt';
 
-const login = (emailOuCPF, senha) => !!emailOuCPF && !!senha;
+interface IBody {
+  login: string;
+  senha: string;
+}
+
+const checaLogin = (login, senha) => !!login && !!senha;
 
 const handler = (request: NowRequest, response: NowResponse) => {
   if (request.method !== 'POST') {
@@ -13,12 +18,12 @@ const handler = (request: NowRequest, response: NowResponse) => {
 
   const {
     body: {
-      emailOuCPF,
+      login,
       senha,
     },
-  } = request;
+  }: { body: IBody } = request;
 
-  if (!login(emailOuCPF, senha)) {
+  if (!checaLogin(login, senha)) {
     response.status(401).end();
     return;
   }
