@@ -1,5 +1,19 @@
 import { NowRequest, NowResponse } from '@vercel/node';
 
+interface IBody {
+  dataAgendamento: Date;
+  dataHoraColetaPrevista: Date;
+  dataHoraColetaRealizada: Date;
+  dataHoraEntregaPrevista: Date;
+  dataHoraEntregaRealizada: Date;
+  valorHora: number;
+  horasLocacao: number;
+  subTotal: number;
+  custosAdicionais: number;
+  valorTotal: number;
+  realizadaVistoria: boolean;
+}
+
 const handler = (request: NowRequest, response: NowResponse) => {
   if (request.method !== 'POST') {
     response.status(405).end();
@@ -20,7 +34,7 @@ const handler = (request: NowRequest, response: NowResponse) => {
       valorTotal,
       realizadaVistoria,
     },
-  } = request;
+  }: { body: IBody } = request;
 
   response.status(200).send({
     dataAgendamento,
