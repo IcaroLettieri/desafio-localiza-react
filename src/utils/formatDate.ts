@@ -10,7 +10,7 @@ import pt from 'date-fns/locale/pt-BR';
  * formatDate(date, "yyyy'-'MM'-'dd'", 10) -> return 2021-12-11
  */
 
-const formatDate = (date: Date, toFormat: string, daysToIncrement?: number) => {
+const formatDate = (date: Date|string, toFormat: string, daysToIncrement?: number) => {
   const dateParse = new Date(date);
 
   if (daysToIncrement) {
