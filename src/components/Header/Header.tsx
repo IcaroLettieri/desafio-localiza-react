@@ -24,26 +24,24 @@ const Header = () => {
   };
 
   return (
-    <div className={styles.header}>
-      <CarbonHeader aria-label={process.env.SITE_NAME}>
-        <HeaderName href="#" prefix="🚗">
-          Alugue seu carro
-        </HeaderName>
-        <HeaderNavigation aria-label="Menu principal">
-          <HeaderGlobalAction aria-label="Abrir menu" onClick={handleMenu}>
-            <Menu20 />
-          </HeaderGlobalAction>
-        </HeaderNavigation>
-        <HeaderGlobalBar>
-          <HeaderGlobalAction aria-label="Pesquisar" onClick={handlePesquisar}>
-            <Search20 />
-          </HeaderGlobalAction>
-          <HeaderGlobalAction aria-label="Área do usuário" onClick={handleUsuario}>
-            <User20 />
-          </HeaderGlobalAction>
-        </HeaderGlobalBar>
-      </CarbonHeader>
-    </div>
+    <CarbonHeader className={styles.header} aria-label={process.env.SITE_NAME}>
+      <HeaderName href="#" prefix="🚗">
+        Alugue seu carro
+      </HeaderName>
+      <HeaderNavigation aria-label="Menu principal">
+        <HeaderGlobalAction aria-label="Abrir menu" onClick={handleMenu}>
+          <Menu20 />
+        </HeaderGlobalAction>
+      </HeaderNavigation>
+      <HeaderGlobalBar>
+        <HeaderGlobalAction aria-label="Pesquisar" onClick={handlePesquisar}>
+          <Search20 />
+        </HeaderGlobalAction>
+        <HeaderGlobalAction aria-label="Área do usuário" onClick={handleUsuario}>
+          <User20 />
+        </HeaderGlobalAction>
+      </HeaderGlobalBar>
+    </CarbonHeader>
   );
 };
 

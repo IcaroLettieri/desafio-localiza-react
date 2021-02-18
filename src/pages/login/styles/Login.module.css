@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  width: 400px;
+  height: 300px;
+  padding: 56px 40px;
+  border: 1px solid #d4dbd4;
+  display: flex;
+  flex-flow: column;
+  border-radius: 6px;
+}
+
+.button {
+  border-radius: 4px;
+  justify-content: center;
+  padding: 0;
+  margin-top: 16px;
+}
