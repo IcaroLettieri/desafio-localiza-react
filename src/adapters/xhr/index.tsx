@@ -6,48 +6,20 @@ export const api = axios.create({ baseURL: '/api', timeout: 2000 });
 export const getVeiculos = () => api.get<IVeiculo[]>('/veiculos');
 
 export const postAgendar = ({
-  dataAgendamento,
-  dataHoraColetaPrevista,
-  dataHoraColetaRealizada,
-  dataHoraEntregaPrevista,
-  dataHoraEntregaRealizada,
-  valorHora,
-  horasLocacao,
-  subTotal,
-  custosAdicionais,
-  valorTotal,
-  realizadaVistoria,
+  VeiculoId,
+  UsuarioId,
+  OperadorId,
+  DataRetirada,
+  DataDevolucao,
 }) => api.post('/agendar', {
-  dataAgendamento,
-  dataHoraColetaPrevista,
-  dataHoraColetaRealizada,
-  dataHoraEntregaPrevista,
-  dataHoraEntregaRealizada,
-  valorHora,
-  horasLocacao,
-  subTotal,
-  custosAdicionais,
-  valorTotal,
-  realizadaVistoria,
+  VeiculoId,
+  UsuarioId,
+  OperadorId,
+  DataRetirada,
+  DataDevolucao,
 });
 
-export const postDevolver = ({
-  id,
-  carroLimpo,
-  tanqueCheio,
-  tanqueLitroPendente,
-  amassados,
-  arranhoes,
-}) => api.post('/devolver', {
-  id,
-  carroLimpo,
-  tanqueCheio,
-  tanqueLitroPendente,
-  amassados,
-  arranhoes,
-});
-
-export const postLogin = ({ login, senha }) => api.post('/login', { login, senha });
+export const postLogin = ({ Cpf, Senha }) => api.post('/login', { Cpf, Senha });
 
 export const postCadastrar = ({
   cpfMatricula,
