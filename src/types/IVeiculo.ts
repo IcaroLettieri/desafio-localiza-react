@@ -11,6 +11,8 @@ interface IVeiculo {
   capacidadeTanque: number;
   combustivel: ICombustivel;
   categoria: ICategoria;
+  handleSelectCar(): void;
+  veiculoSelecionado?: {};
 }
 
 export default IVeiculo;
