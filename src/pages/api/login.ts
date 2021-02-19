@@ -4,11 +4,11 @@ import { NowRequest, NowResponse } from '@vercel/node';
 import salt from '../../constants/salt';
 
 interface IBody {
-  login: string;
-  senha: string;
+  Cpf: string;
+  Senha: string;
 }
 
-const checaLogin = (login, senha) => !!login && !!senha;
+const checaLogin = (Cpf, Senha) => !!Cpf && !!Senha;
 
 const handler = (request: NowRequest, response: NowResponse) => {
   if (request.method !== 'POST') {
@@ -18,12 +18,12 @@ const handler = (request: NowRequest, response: NowResponse) => {
 
   const {
     body: {
-      login,
-      senha,
+      Cpf,
+      Senha,
     },
   }: { body: IBody } = request;
 
-  if (!checaLogin(login, senha)) {
+  if (!checaLogin(Cpf, Senha)) {
     response.status(401).end();
     return;
   }
