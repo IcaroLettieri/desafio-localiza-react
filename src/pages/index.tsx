@@ -13,8 +13,11 @@ import IAgenda from '../types/IAgenda';
 import ILogin from '../types/ILogin';
 import { isAuthenticated, login } from '../services/auth';
 import { cpfMask } from '../utils/mask';
+import formatDate from '../utils/formatDate';
 
 const Index = () => {
+  const today = new Date();
+
   const [dataColeta, handleDataColeta] = useValue('');
   const [dataColetaValidation, setDataColetaValidation] = useState(false);
 
@@ -202,30 +205,64 @@ const Index = () => {
     }
   };
 
-  const renderTimeSelect = () => (
+  const compareTimes = (
+    date = `${today.getDate()}/${((today.getMonth() + 1) > 9) ? (today.getMonth() + 1) : (`0${today.getMonth() + 1}`)}/${today.getFullYear()}`,
+    time = '00:00',
+    input = '',
+  ) => {
+    const dateToCompare = new Date(
+      Number(date.slice(6, 10)),
+      (Number(date.slice(3, 5)) - 1),
+      Number(date.slice(0, 2)),
+      Number(time.slice(0, 2)),
+      Number(time.slice(3, 5)),
+    );
+
+    switch (input) {
+      case ('Coleta'):
+        return (dateToCompare < today);
+      case ('Entrega'):
+        if (dataColeta !== '') {
+          const DataRetirada = new Date(
+            Number(dataColeta.slice(6, 10)),
+            (Number(dataColeta.slice(3, 5)) - 1),
+            Number(dataColeta.slice(0, 2)),
+            Number(horaColeta.slice(0, 2)),
+            Number(horaColeta.slice(3, 5)),
+          );
+          if (dateToCompare <= DataRetirada) {
+            return true;
+          } return false;
+        } return (dateToCompare < today);
+      default:
+        return false;
+    }
+  };
+
+  const renderTimeSelect = (date, input) => (
     <>
       <SelectItem value="" text="hh:mm" />
-      <SelectItem value="08:00" text="08:00" />
-      <SelectItem value="08:30" text="08:30" />
-      <SelectItem value="09:00" text="09:00" />
-      <SelectItem value="09:30" text="09:30" />
-      <SelectItem value="10:00" text="10:00" />
-      <SelectItem value="10:30" text="10:30" />
-      <SelectItem value="11:00" text="11:00" />
-      <SelectItem value="11:30" text="11:30" />
-      <SelectItem value="12:00" text="12:00" />
-      <SelectItem value="12:30" text="12:30" />
-      <SelectItem value="13:00" text="13:00" />
-      <SelectItem value="13:30" text="13:30" />
-      <SelectItem value="14:00" text="14:00" />
-      <SelectItem value="14:30" text="14:30" />
-      <SelectItem value="15:00" text="15:00" />
-      <SelectItem value="15:30" text="15:30" />
-      <SelectItem value="16:00" text="16:00" />
-      <SelectItem value="16:30" text="16:30" />
-      <SelectItem value="17:00" text="17:00" />
-      <SelectItem value="17:30" text="17:30" />
-      <SelectItem value="18:00" text="18:00" />
+      <SelectItem value="08:00" text="08:00" disabled={compareTimes(date, '08:00', input)} />
+      <SelectItem value="08:30" text="08:30" disabled={compareTimes(date, '08:30', input)} />
+      <SelectItem value="09:00" text="09:00" disabled={compareTimes(date, '09:00', input)} />
+      <SelectItem value="09:30" text="09:30" disabled={compareTimes(date, '09:30', input)} />
+      <SelectItem value="10:00" text="10:00" disabled={compareTimes(date, '10:00', input)} />
+      <SelectItem value="10:30" text="10:30" disabled={compareTimes(date, '10:30', input)} />
+      <SelectItem value="11:00" text="11:00" disabled={compareTimes(date, '11:00', input)} />
+      <SelectItem value="11:30" text="11:30" disabled={compareTimes(date, '11:30', input)} />
+      <SelectItem value="12:00" text="12:00" disabled={compareTimes(date, '12:00', input)} />
+      <SelectItem value="12:30" text="12:30" disabled={compareTimes(date, '12:30', input)} />
+      <SelectItem value="13:00" text="13:00" disabled={compareTimes(date, '13:00', input)} />
+      <SelectItem value="13:30" text="13:30" disabled={compareTimes(date, '13:30', input)} />
+      <SelectItem value="14:00" text="14:00" disabled={compareTimes(date, '14:00', input)} />
+      <SelectItem value="14:30" text="14:30" disabled={compareTimes(date, '14:30', input)} />
+      <SelectItem value="15:00" text="15:00" disabled={compareTimes(date, '15:00', input)} />
+      <SelectItem value="15:30" text="15:30" disabled={compareTimes(date, '15:30', input)} />
+      <SelectItem value="16:00" text="16:00" disabled={compareTimes(date, '16:00', input)} />
+      <SelectItem value="16:30" text="16:30" disabled={compareTimes(date, '16:30', input)} />
+      <SelectItem value="17:00" text="17:00" disabled={compareTimes(date, '17:00', input)} />
+      <SelectItem value="17:30" text="17:30" disabled={compareTimes(date, '17:30', input)} />
+      <SelectItem value="18:00" text="18:00" disabled={compareTimes(date, '18:00', input)} />
     </>
   );
 
@@ -363,7 +400,11 @@ const Index = () => {
                     <FormLabel>Data e Hora da Coleta</FormLabel>
                   </Column>
                   <Column sm={12} md={4} lg={6}>
-                    <DatePicker dateFormat="d/m/Y" datePickerType="single">
+                    <DatePicker
+                      dateFormat="d/m/Y"
+                      datePickerType="single"
+                      minDate={formatDate(today, "dd'/'MM'/'yyyy'")}
+                    >
                       <DatePickerInput
                         labelText=""
                         id="date-coleta-prevista"
@@ -381,12 +422,13 @@ const Index = () => {
                     <Select
                       id="select-time-coleta"
                       labelText=" "
+                      style={{ maxWidth: 160 }}
                       onChange={handleHoraColeta}
                       value={horaColeta}
                       invalid={horaColetaValidation}
                       invalidText="Faltou o horário !"
                     >
-                      {renderTimeSelect()}
+                      {renderTimeSelect(((dataColeta === '') ? undefined : dataColeta), 'Coleta')}
                     </Select>
                   </Column>
                 </Row>
@@ -396,7 +438,14 @@ const Index = () => {
                     <FormLabel>Data e Hora da Entrega</FormLabel>
                   </Column>
                   <Column sm={12} md={4} lg={6}>
-                    <DatePicker dateFormat="d/m/Y" datePickerType="single">
+                    <DatePicker
+                      dateFormat="d/m/Y"
+                      datePickerType="single"
+                      minDate={
+                        (dataColeta !== '') ? dataColeta
+                          : formatDate(today, "dd'/'MM'/'yyyy'")
+                      }
+                    >
                       <DatePickerInput
                         labelText=""
                         id="date-entrega-prevista"
@@ -414,23 +463,24 @@ const Index = () => {
                     <Select
                       id="select-time-entrega"
                       labelText=" "
+                      style={{ maxWidth: 160 }}
                       onChange={handleHoraEntrega}
                       value={horaEntrega}
                       invalid={horaEntregaValidation}
                       invalidText="Faltou o horário !"
                     >
-                      {renderTimeSelect()}
+                      {renderTimeSelect(((dataEntrega === '') ? undefined : dataEntrega), 'Entrega')}
                     </Select>
                   </Column>
                 </Row>
                 <Row style={{ marginTop: 10 }}>
                   <Column sm={12} md={4} lg={6}>
-                    <Button onClick={handleSubmit}>
+                    <Button style={{ maxWidth: 100 }} onClick={handleSubmit}>
                       Alugar
                     </Button>
                   </Column>
                   <Column sm={12} md={4} lg={6}>
-                    <Button kind="secondary" onClick={handleCancelSelectCar}>
+                    <Button kind="secondary" style={{ maxWidth: 100 }} onClick={handleCancelSelectCar}>
                       Cancelar
                     </Button>
                   </Column>
