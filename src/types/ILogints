@@ -1,6 +1,0 @@
-interface ILogin {
-  login: string;
-  senha: string;
-}
-
-export default ILogin;
