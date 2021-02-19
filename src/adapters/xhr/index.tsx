@@ -1,5 +1,8 @@
 import axios from 'axios';
+import ICepInformacoes from '../../types/ICepInformacoes';
 import IVeiculo from '../../types/IVeiculo';
+
+export const getCepInformacoes = (cep: string) => axios.get<ICepInformacoes>(`http://viacep.com.br/ws/${cep}/json/`);
 
 export const api = axios.create({ baseURL: '/api', timeout: 2000 });
 
