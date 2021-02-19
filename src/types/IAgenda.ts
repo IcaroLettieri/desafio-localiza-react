@@ -1,15 +1,9 @@
 interface IAgenda {
-  dataAgendamento: Date;
-  dataHoraColetaPrevista: Date;
-  dataHoraColetaRealizada: Date;
-  dataHoraEntregaPrevista: Date;
-  dataHoraEntregaRealizada: Date;
-  valorHora: number;
-  horasLocacao: number;
-  subTotal: number;
-  custosAdicionais: number;
-  valorTotal: number;
-  realizadaVistoria: boolean;
+  VeiculoId: number;
+  UsuarioId: number;
+  OperadorId: number;
+  DataRetirada: Date;
+  DataDevolucao: Date;
 }
 
 export default IAgenda;
