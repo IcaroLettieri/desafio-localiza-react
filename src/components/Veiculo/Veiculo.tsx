@@ -1,4 +1,6 @@
-import { Button, Tile, Tooltip } from 'carbon-components-react';
+import {
+  Button, Tag, Tile, Tooltip,
+} from 'carbon-components-react';
 import IVeiculo from '../../types/IVeiculo';
 import formatCurrency from '../../utils/formatCurrency';
 import styles from './styles/Veiculo.module.scss';
@@ -13,6 +15,8 @@ const Veiculo = ({
   modelo,
   placa,
   valorHora,
+  handleSelectCar,
+  veiculoSelecionado,
 }: IVeiculo) => (
   <Tile className={styles.veiculo} key={id}>
     <div className={styles.image}>
@@ -43,11 +47,19 @@ const Veiculo = ({
         </Tile>
       </div>
       <div className={styles.button}>
-        <Button data-placa={placa}>
-          <span>
-            Alugue por <strong>{formatCurrency(valorHora)}</strong>/hora
-          </span>
-        </Button>
+        {(!veiculoSelecionado)
+          ? (
+            <Button data-placa={placa} onClick={handleSelectCar}>
+              <span>
+                Alugar por <strong>{formatCurrency(valorHora)}</strong>/hora
+              </span>
+            </Button>
+          )
+          : (
+            <Tag>
+              <p>Veículo selecionado por <strong>{formatCurrency(valorHora)}</strong>/hora</p>
+            </Tag>
+          )}
       </div>
     </div>
   </Tile>
