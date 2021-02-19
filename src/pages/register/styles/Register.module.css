@@ -4,16 +4,9 @@
   justify-content: center;
 }
 
-.avatar {
-  width: 120px;
-  height: 120px;
-  margin: auto;
-  margin-bottom: 24px;
-  opacity: 0.6;
-}
-
 .form-container {
   width: 540px;
+  height: auto;
   padding: 40px;
   border: 1px solid #d4dbd4;
   display: flex;
@@ -24,12 +17,13 @@
 .button {
   border-radius: 4px;
   justify-content: center;
+  display: flex;
   padding: 0;
   margin-top: 16px;
   min-width: 100%;
 }
 
-.register {
+.login {
   margin-top: 16px;
   color: blue;
   text-align: right;
