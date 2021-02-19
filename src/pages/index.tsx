@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import {
   Grid, Row, Loading, Column, MultiSelect, FormLabel, DatePicker,
   DatePickerInput, Button, Select, SelectItem, ModalHeader, ModalFooter,
-  ComposedModal,
-  ModalBody,
-  TextInput,
+  ComposedModal, ModalBody, TextInput, Link, InlineNotification,
 } from 'carbon-components-react';
+
 import { getVeiculos, postAgendar, postLogin } from '../adapters/xhr';
 import IVeiculo from '../types/IVeiculo';
 import Veiculo from '../components/Veiculo/Veiculo';
@@ -17,12 +16,24 @@ import { cpfMask } from '../utils/mask';
 
 const Index = () => {
   const [dataColeta, handleDataColeta] = useValue('');
+  const [dataColetaValidation, setDataColetaValidation] = useState(false);
+
   const [horaColeta, handleHoraColeta] = useValue('');
+  const [horaColetaValidation, setHoraColetaValidation] = useState(false);
+
   const [dataEntrega, handleDataEntrega] = useValue('');
+  const [dataEntregaValidation, setDataEntregaValidation] = useState(false);
+
   const [horaEntrega, handleHoraEntrega] = useValue('');
+  const [horaEntregaValidation, setHoraEntregaValidation] = useState(false);
 
   const [cpf, setCpf] = useState('');
+  const [cpfValidation, setCpfValidation] = useState(false);
+
   const [password, handlePassword] = useValue('');
+  const [passwordValidation, setPasswordValidation] = useState(false);
+
+  const [loginValidation, setLoginValidation] = useState(false);
 
   const [veiculos, setVeiculos] = useState<IVeiculo[]>();
   const [veiculoSelecionado, setVeiculoSelecionado] = useState<IVeiculo>();
@@ -102,7 +113,30 @@ const Index = () => {
   };
 
   const handleSubmit = async () => {
-    if (!isAuthenticated()) {
+    let failValidation = false;
+    if (dataColeta === '') {
+      failValidation = true;
+      setDataColetaValidation(true);
+    } else setDataColetaValidation(false);
+
+    if (horaColeta === '') {
+      failValidation = true;
+      setHoraColetaValidation(true);
+    } else setHoraColetaValidation(false);
+
+    if (dataEntrega === '') {
+      failValidation = true;
+      setDataEntregaValidation(true);
+    } else setDataEntregaValidation(false);
+
+    if (horaEntrega === '') {
+      failValidation = true;
+      setHoraEntregaValidation(true);
+    } else setHoraEntregaValidation(false);
+
+    if (failValidation) {
+      toggleModalMessage('Necessário preencher os campos de formulário.');
+    } else if (!isAuthenticated()) {
       setOpenModalLogin(true);
     } else {
       const DataRetirada = new Date(
@@ -139,16 +173,32 @@ const Index = () => {
   };
 
   const handleLogin = async () => {
-    const data:ILogin = {
-      Cpf: cpf,
-      Senha: password,
-    };
+    let failValidation = false;
+    if (cpf === '') {
+      failValidation = true;
+      setCpfValidation(true);
+    } else setCpfValidation(false);
 
-    const response = await postLogin(data);
+    if (password === '') {
+      failValidation = true;
+      setPasswordValidation(true);
+    } else setPasswordValidation(false);
 
-    if (response.status === 200) {
-      login(response.data.token);
-      setOpenModalLogin(false);
+    if (!failValidation) {
+      const data:ILogin = {
+        Cpf: cpf,
+        Senha: password,
+      };
+
+      const response = await postLogin(data);
+
+      if (response.status === 200) {
+        login(response.data.token);
+        setOpenModalLogin(false);
+        setLoginValidation(false);
+      } else {
+        setLoginValidation(true);
+      }
     }
   };
 
@@ -214,13 +264,32 @@ const Index = () => {
           labelText="Informe seu CPF"
           value={cpf}
           onChange={handleCpf}
+          autoComplete="off"
+          invalid={cpfValidation}
+          invalidText="Digite seu CPF"
         />
         <TextInput.PasswordInput
           id="password-login"
           labelText="Informe a senha"
           value={password}
           onChange={handlePassword}
+          invalid={passwordValidation}
+          invalidText="Digite sua senha"
         />
+        <Link onClick={() => { setOpenModalRegister(true); }}>
+          <span>Não possuo cadastro</span>
+        </Link>
+        {loginValidation
+        && (
+        <InlineNotification
+          title="Houve um problema com o login."
+          subtitle="Verifique suas credenciais."
+          kind="error"
+          iconDescription="closes notification"
+          lowContrast
+          hideCloseButton
+        />
+        )}
       </ModalBody>
       <ModalFooter>
         <Button
@@ -302,6 +371,9 @@ const Index = () => {
                         style={{ maxWidth: 160, marginTop: 8 }}
                         value={dataColeta}
                         onBlur={handleDataColeta}
+                        autoComplete="off"
+                        invalid={dataColetaValidation}
+                        invalidText="Faltou a data !"
                       />
                     </DatePicker>
                   </Column>
@@ -311,6 +383,8 @@ const Index = () => {
                       labelText=" "
                       onChange={handleHoraColeta}
                       value={horaColeta}
+                      invalid={horaColetaValidation}
+                      invalidText="Faltou o horário !"
                     >
                       {renderTimeSelect()}
                     </Select>
@@ -330,6 +404,9 @@ const Index = () => {
                         style={{ maxWidth: 160, marginTop: 8 }}
                         value={dataEntrega}
                         onBlur={handleDataEntrega}
+                        autoComplete="off"
+                        invalid={dataEntregaValidation}
+                        invalidText="Faltou a data !"
                       />
                     </DatePicker>
                   </Column>
@@ -339,6 +416,8 @@ const Index = () => {
                       labelText=" "
                       onChange={handleHoraEntrega}
                       value={horaEntrega}
+                      invalid={horaEntregaValidation}
+                      invalidText="Faltou o horário !"
                     >
                       {renderTimeSelect()}
                     </Select>
