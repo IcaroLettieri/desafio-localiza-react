@@ -4,7 +4,7 @@ import IVeiculo from '../../types/IVeiculo';
 
 export const getCepInformacoes = (cep: string) => axios.get<ICepInformacoes>(`http://viacep.com.br/ws/${cep}/json/`);
 
-export const api = axios.create({ baseURL: '/api', timeout: 2000 });
+export const api = axios.create({ baseURL: '/api', timeout: 5000 });
 
 export const getVeiculos = () => api.get<IVeiculo[]>('/veiculos');
 
