@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  width: 540px;
+  height: auto;
+  padding: 40px;
+  border: 1px solid #d4dbd4;
+  display: flex;
+  flex-flow: column;
+  border-radius: 6px;
+}
+
+.button {
+  border-radius: 4px;
+  justify-content: center;
+  display: flex;
+  padding: 0;
+  margin-top: 16px;
+  min-width: 100%;
+}
+
+.login {
+  margin-top: 16px;
+  color: blue;
+  text-align: right;
+  cursor: pointer;
+}
+
+.register:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
