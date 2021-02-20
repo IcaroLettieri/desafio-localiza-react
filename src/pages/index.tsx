@@ -11,7 +11,7 @@ import {
 } from '../adapters/xhr';
 import IVeiculo from '../types/IVeiculo';
 import Veiculo from '../components/Veiculo/Veiculo';
-import useValue from './hooks/useValue';
+import useValue from '../utils/useValue';
 import IAgenda from '../types/IAgenda';
 import ILogin from '../types/ILogin';
 import { getUserId, isAuthenticated, login } from '../services/auth';
