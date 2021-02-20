@@ -1,0 +1,47 @@
+.title {
+  font-weight: bold;
+  color: #379849;
+  font-size: 14px;
+  letter-spacing: 0.35px;
+  text-align: center;
+}
+
+.buttonSecondary {
+  padding: 0;
+  text-align: center;
+  background-color: #1d1d1d;
+  color: #ffffff;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 100px;
+}
+
+.buttonSecondary span {
+  width: 100%;
+}
+
+.buttonSecondary:hover {
+  opacity: 0.9;
+  background-color: #333333;
+  color: #e7e7e7;
+}
+
+.buttonPrimary {
+  padding: 0;
+  text-align: center;
+  background-color: #d4db26;
+  color: #004a34;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 100px;
+}
+
+.buttonPrimary span {
+  width: 100%;
+}
+
+.buttonPrimary:hover {
+  opacity: 0.9;
+  background-color: #d4db26;
+  color: #004a34;
+}
