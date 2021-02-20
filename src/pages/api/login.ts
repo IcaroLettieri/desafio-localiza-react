@@ -37,7 +37,15 @@ const handler = (request: NowRequest, response: NowResponse) => {
   );
 
   response.status(200).send({
-    token,
+    success: true,
+    message: '',
+    entity: {
+      id: 2,
+      login: '1011',
+      nome: 'Nome do Cliente',
+      tipoUsuario: 'Cliente',
+      token,
+    },
   });
 };
 
