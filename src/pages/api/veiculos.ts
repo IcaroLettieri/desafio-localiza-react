@@ -22,7 +22,7 @@ const handler = (_, response: NowResponse) => {
   const combustiveis: Combustivel[] = ['Álcool', 'Gasolina', 'Diesel'];
   const categorias: Categoria[] = ['Básico', 'Completo', 'Luxo'];
 
-  for (let i = 1; i < 101; i++) {
+  for (let i = 1; i < 21; i++) {
     veiculos.push({
       id: i,
       img: `cars/${faker.random.number({ min: 1, max: 10 })}.png`,

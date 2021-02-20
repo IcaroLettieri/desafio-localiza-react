@@ -47,7 +47,7 @@ const handler = (_, response: NowResponse) => {
   const combustiveis: Combustivel[] = ['Álcool', 'Gasolina', 'Diesel'];
   const categorias: Categoria[] = ['Básico', 'Completo', 'Luxo'];
 
-  for (let i = 1; i < 11; i++) {
+  for (let i = 1; i < 6; i++) {
     agendamentos.push({
       Id: i,
       DataAgendamento: faker.date.recent(),
