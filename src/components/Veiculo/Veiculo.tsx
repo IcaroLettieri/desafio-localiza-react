@@ -1,5 +1,5 @@
 import {
-  Button, Tag, Tile, Tooltip, Accordion, AccordionItem,
+  Button, Tag, Tooltip, Accordion, AccordionItem,
 } from 'carbon-components-react';
 import IVeiculo from '../../types/IVeiculo';
 import formatCurrency from '../../utils/formatCurrency';
