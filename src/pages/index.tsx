@@ -92,6 +92,11 @@ const Index = () => {
       });
   }, []);
 
+  const toggleModalMessage = (message) => {
+    setMessageModal(message);
+    setOpenModalMessage(true);
+  };
+
   const loadViaCep = async () => {
     if (cep.length !== 10) return;
 
@@ -107,7 +112,7 @@ const Index = () => {
         setCepGeral(false);
       }
     } else {
-      alert('CEP INVALIDO!');
+      toggleModalMessage('CEP inválido.');
     }
   };
 
@@ -117,11 +122,6 @@ const Index = () => {
       .filter((item, index, self) => self.indexOf(item) === index)
       .map((item) => ({ label: item }))
   );
-
-  const toggleModalMessage = (message) => {
-    setMessageModal(message);
-    setOpenModalMessage(true);
-  };
 
   const handleCpf = (event) => {
     setCpf(cpfMask(event.currentTarget.value));
