@@ -4,39 +4,48 @@ import {
   DatePickerInput, Button, Select, SelectItem, ModalHeader, ModalFooter,
   ComposedModal, ModalBody, TextInput, Link, InlineNotification,
 } from 'carbon-components-react';
+import { cpf as CpfValidator } from 'cpf-cnpj-validator';
 
-import { getVeiculos, postAgendar, postLogin } from '../adapters/xhr';
+import {
+  getCepInformacoes, getVeiculos, postAgendar, postCadastrar, postLogin,
+} from '../adapters/xhr';
 import IVeiculo from '../types/IVeiculo';
 import Veiculo from '../components/Veiculo/Veiculo';
 import useValue from './hooks/useValue';
 import IAgenda from '../types/IAgenda';
 import ILogin from '../types/ILogin';
-import { isAuthenticated, login } from '../services/auth';
-import { cpfMask } from '../utils/mask';
+import { getUserId, isAuthenticated, login } from '../services/auth';
+import { cepMask, cpfMask } from '../utils/mask';
 import formatDate from '../utils/formatDate';
+import typeOnlyNumbers from '../utils/typeOnlyNumbers';
+import ICadastro from '../types/ICadastro';
 
 const Index = () => {
   const today = new Date();
 
   const [dataColeta, handleDataColeta] = useValue('');
-  const [dataColetaValidation, setDataColetaValidation] = useState(false);
-
   const [horaColeta, handleHoraColeta] = useValue('');
-  const [horaColetaValidation, setHoraColetaValidation] = useState(false);
-
   const [dataEntrega, handleDataEntrega] = useValue('');
-  const [dataEntregaValidation, setDataEntregaValidation] = useState(false);
-
   const [horaEntrega, handleHoraEntrega] = useValue('');
-  const [horaEntregaValidation, setHoraEntregaValidation] = useState(false);
+  const [agendamentoValidation, setAgendamentoValidation] = useState(false);
 
   const [cpf, setCpf] = useState('');
-  const [cpfValidation, setCpfValidation] = useState(false);
-
   const [password, handlePassword] = useValue('');
-  const [passwordValidation, setPasswordValidation] = useState(false);
-
   const [loginValidation, setLoginValidation] = useState(false);
+
+  const [nome, handleNome] = useValue('');
+  const [dataNascimento, handleDataNascimento] = useValue('');
+  const [cep, setCep] = useState('');
+  const [cepGeral, setCepGeral] = useState(false);
+  const [logradouro, setLogradouro] = useState('');
+  const [numero, handleNumero] = useValue('');
+  const [complemento, handleComplemento] = useValue('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [passwordConfirm, handlePasswordConfirm] = useValue('');
+  const [registerValidation, setRegisterValidation] = useState(false);
+
+  const [trySubmit, setTrySubmit] = useState(false);
 
   const [veiculos, setVeiculos] = useState<IVeiculo[]>();
   const [veiculoSelecionado, setVeiculoSelecionado] = useState<IVeiculo>();
@@ -83,6 +92,25 @@ const Index = () => {
       });
   }, []);
 
+  const loadViaCep = async () => {
+    if (cep.length !== 10) return;
+
+    const cepTratado = cep.replace('-', '').replaceAll('.', '');
+    const { data } = await getCepInformacoes(cepTratado);
+    if (!data.erro) {
+      if (logradouro !== data.logradouro) setLogradouro(data.logradouro || '');
+      if (cidade !== data.localidade) setCidade(data.localidade || '');
+      if (estado !== data.uf) setEstado(data.uf || '');
+      if (data.logradouro === '') {
+        setCepGeral(true);
+      } else {
+        setCepGeral(false);
+      }
+    } else {
+      alert('CEP INVALIDO!');
+    }
+  };
+
   const preparaDadosMultiselect = (categoria) => (
     veiculos
       .map((item) => item[categoria])
@@ -97,6 +125,10 @@ const Index = () => {
 
   const handleCpf = (event) => {
     setCpf(cpfMask(event.currentTarget.value));
+  };
+
+  const handleCep = (event) => {
+    setCep(cepMask(event.currentTarget.value));
   };
 
   const handleMultiSelect = ({ selectedItems }, label) => {
@@ -115,31 +147,18 @@ const Index = () => {
     setVeiculosFiltrados(veiculos);
   };
 
-  const handleSubmit = async () => {
+  const handleAgendamento = async () => {
+    setTrySubmit(true);
     let failValidation = false;
-    if (dataColeta === '') {
+    if (dataColeta === '' || horaColeta === ''
+    || dataEntrega === '' || horaEntrega === '') {
       failValidation = true;
-      setDataColetaValidation(true);
-    } else setDataColetaValidation(false);
-
-    if (horaColeta === '') {
-      failValidation = true;
-      setHoraColetaValidation(true);
-    } else setHoraColetaValidation(false);
-
-    if (dataEntrega === '') {
-      failValidation = true;
-      setDataEntregaValidation(true);
-    } else setDataEntregaValidation(false);
-
-    if (horaEntrega === '') {
-      failValidation = true;
-      setHoraEntregaValidation(true);
-    } else setHoraEntregaValidation(false);
+    }
 
     if (failValidation) {
       toggleModalMessage('Necessário preencher os campos de formulário.');
     } else if (!isAuthenticated()) {
+      setTrySubmit(false);
       setOpenModalLogin(true);
     } else {
       const DataRetirada = new Date(
@@ -160,7 +179,7 @@ const Index = () => {
 
       const data:IAgenda = {
         VeiculoId: veiculoSelecionado.id,
-        UsuarioId: 2,
+        UsuarioId: Number(getUserId()),
         OperadorId: 1,
         DataRetirada,
         DataDevolucao,
@@ -171,21 +190,21 @@ const Index = () => {
       if (response.status === 200) {
         toggleModalMessage('Locação agendada com sucesso !');
         handleCancelSelectCar();
+        setTrySubmit(false);
+        setAgendamentoValidation(false);
+      } else {
+        setAgendamentoValidation(true);
       }
     }
   };
 
   const handleLogin = async () => {
-    let failValidation = false;
-    if (cpf === '') {
-      failValidation = true;
-      setCpfValidation(true);
-    } else setCpfValidation(false);
+    setTrySubmit(true);
 
-    if (password === '') {
+    let failValidation = false;
+    if (!CpfValidator.isValid(cpf) || password === '') {
       failValidation = true;
-      setPasswordValidation(true);
-    } else setPasswordValidation(false);
+    }
 
     if (!failValidation) {
       const data:ILogin = {
@@ -196,11 +215,54 @@ const Index = () => {
       const response = await postLogin(data);
 
       if (response.status === 200) {
-        login(response.data.token);
+        login(response.data.entity);
         setOpenModalLogin(false);
         setLoginValidation(false);
+        setTrySubmit(false);
       } else {
         setLoginValidation(true);
+      }
+    }
+  };
+
+  const handleRegister = async () => {
+    setTrySubmit(true);
+
+    let failValidation = false;
+    if (!CpfValidator.isValid(cpf) || nome === '' || password === ''
+    || password !== passwordConfirm || dataNascimento === ''
+    || cep === '' || logradouro === '' || numero === '' || estado === '') {
+      failValidation = true;
+    }
+
+    if (!failValidation) {
+      const DataNascimento = new Date(
+        Number(dataNascimento.slice(6, 10)),
+        (Number(dataNascimento.slice(3, 5)) - 1),
+        Number(dataNascimento.slice(0, 2)),
+      );
+
+      const data:ICadastro = {
+        Cpf: cpf,
+        Nome: nome,
+        Senha: password,
+        DataNascimento,
+        Cep: cep,
+        Logradouro: logradouro,
+        Numero: Number(numero),
+        Complemento: complemento,
+        Cidade: cidade,
+        Estado: estado,
+      };
+
+      const response = await postCadastrar(data);
+
+      if (response.status === 200) {
+        setOpenModalRegister(false);
+        setRegisterValidation(false);
+        setTrySubmit(false);
+      } else {
+        setRegisterValidation(true);
       }
     }
   };
@@ -267,13 +329,165 @@ const Index = () => {
   );
 
   const renderModalRegister = () => (
-    <ComposedModal open={openModalRegister} onClose={() => setOpenModalRegister(false)} size="sm">
+    <ComposedModal
+      open={openModalRegister}
+      onClose={() => setOpenModalRegister(false)}
+      size="sm"
+    >
       <ModalHeader style={{ padding: 20 }}>
         <h4>Cadastro</h4>
       </ModalHeader>
-      <ModalBody>
-        <TextInput id="user" labelText="Informe o usuário" />
-        <TextInput type="password" id="password" labelText="Informe a senha" />
+      <ModalBody style={{ paddingBottom: 30, paddingTop: 30 }}>
+        <TextInput
+          id="name-register"
+          labelText="Nome Completo"
+          value={nome}
+          onChange={handleNome}
+          autoComplete="off"
+          invalid={trySubmit && !nome.trim()}
+          invalidText="Digite seu Nome Completo"
+        />
+        <DatePicker
+          dateFormat="d/m/Y"
+          datePickerType="single"
+          // minDate={formatDate(today, "dd'/'MM'/'yyyy'")}
+        >
+          <DatePickerInput
+            labelText="Data de Nascimento"
+            id="date-nascimento"
+            placeholder="dd/mm/yyyy"
+            value={dataNascimento}
+            onBlur={handleDataNascimento}
+            autoComplete="off"
+            invalid={trySubmit && !dataNascimento.trim()}
+            invalidText="Informe seu dia de nascimento."
+          />
+        </DatePicker>
+
+        <TextInput
+          id="cpf-register"
+          labelText="Informe seu CPF"
+          value={cpf}
+          onChange={handleCpf}
+          autoComplete="off"
+          invalid={trySubmit && !CpfValidator.isValid(cpf)}
+          invalidText="Preencha um CPF válido"
+        />
+
+        <TextInput
+          id="cep-register"
+          labelText="Informe seu CEP"
+          value={cep}
+          onChange={handleCep}
+          autoComplete="off"
+          invalid={trySubmit && !cep.trim()}
+          invalidText="Digite seu CEP"
+          onBlur={loadViaCep}
+        />
+
+        <Button
+          kind="secondary"
+          onClick={loadViaCep}
+        >Buscar CEP
+        </Button>
+
+        <TextInput
+          id="logradouro"
+          name="logradouro"
+          labelText="Logradouro"
+          type="text"
+          value={logradouro}
+          readOnly={!cepGeral}
+          onChange={(e) => setLogradouro(e.target.value)}
+          autoComplete="off"
+          invalidText="Preencha o logradouro"
+          invalid={trySubmit && !trySubmit && !logradouro.trim()}
+        />
+
+        <TextInput
+          maxLength={5}
+          id="numero-register"
+          labelText="Número"
+          onKeyDown={typeOnlyNumbers}
+          value={numero}
+          autoComplete="off"
+          onChange={handleNumero}
+          invalidText="Preencha um número"
+          invalid={trySubmit && !numero.trim()}
+        />
+
+        <TextInput
+          id="complemento"
+          name="complemento"
+          labelText="Complemento"
+          type="text"
+          value={complemento}
+          onChange={handleComplemento}
+          autoComplete="off"
+        />
+
+        <TextInput
+          id="cidade"
+          labelText="Cidade"
+          type="text"
+          value={cidade}
+          readOnly
+          onChange={(e) => setCidade(e.target.value)}
+          autoComplete="off"
+          invalidText="Preencha sua Cidade"
+          invalid={trySubmit && !cidade.trim()}
+        />
+
+        <TextInput
+          id="estado"
+          labelText="Estado"
+          type="text"
+          maxLength={2}
+          value={estado}
+          readOnly
+          onChange={(e) => setEstado(e.target.value)}
+          autoComplete="off"
+          invalidText="Preencha seu Estado"
+          invalid={trySubmit && !estado.trim()}
+        />
+
+        <TextInput.PasswordInput
+          id="password-register"
+          labelText="Informe a senha"
+          value={password}
+          onChange={handlePassword}
+          invalid={trySubmit && !password.trim()}
+          invalidText="Digite sua senha"
+        />
+
+        <TextInput.PasswordInput
+          id="password-register-confirm"
+          labelText="Confirmar a senha"
+          value={passwordConfirm}
+          onChange={handlePasswordConfirm}
+          invalid={trySubmit && (!passwordConfirm.trim()
+            || passwordConfirm !== password)}
+          invalidText="Sua confirmação de senha deve ser igual a sua senha"
+        />
+
+        <Link onClick={() => {
+          setOpenModalRegister(false);
+          setOpenModalLogin(true);
+        }}
+        >
+          <span>Já possuo cadastro</span>
+        </Link>
+        {registerValidation
+        && (
+        <InlineNotification
+          title="Houve um problema ao realizar o cadastro."
+          subtitle="Nosso suporte está verificando."
+          kind="error"
+          iconDescription="closes notification"
+          lowContrast
+          hideCloseButton
+        />
+        )}
       </ModalBody>
       <ModalFooter>
         <Button
@@ -281,7 +495,11 @@ const Index = () => {
           onClick={() => { setOpenModalRegister(false); }}
         >Cancelar
         </Button>
-        <Button kind="primary">Cadastrar</Button>
+        <Button
+          kind="primary"
+          onClick={handleRegister}
+        >Cadastrar
+        </Button>
       </ModalFooter>
     </ComposedModal>
   );
@@ -297,20 +515,20 @@ const Index = () => {
       </ModalHeader>
       <ModalBody style={{ paddingBottom: 30, paddingTop: 30 }}>
         <TextInput
-          id="cpf"
+          id="cpf-login"
           labelText="Informe seu CPF"
           value={cpf}
           onChange={handleCpf}
           autoComplete="off"
-          invalid={cpfValidation}
-          invalidText="Digite seu CPF"
+          invalid={trySubmit && !CpfValidator.isValid(cpf)}
+          invalidText="Preencha um CPF válido"
         />
         <TextInput.PasswordInput
           id="password-login"
           labelText="Informe a senha"
           value={password}
           onChange={handlePassword}
-          invalid={passwordValidation}
+          invalid={trySubmit && !password.trim()}
           invalidText="Digite sua senha"
         />
         <Link onClick={() => { setOpenModalRegister(true); }}>
@@ -413,7 +631,7 @@ const Index = () => {
                         value={dataColeta}
                         onBlur={handleDataColeta}
                         autoComplete="off"
-                        invalid={dataColetaValidation}
+                        invalid={trySubmit && !dataColeta.trim()}
                         invalidText="Faltou a data !"
                       />
                     </DatePicker>
@@ -425,7 +643,7 @@ const Index = () => {
                       style={{ maxWidth: 160 }}
                       onChange={handleHoraColeta}
                       value={horaColeta}
-                      invalid={horaColetaValidation}
+                      invalid={trySubmit && !horaColeta.trim()}
                       invalidText="Faltou o horário !"
                     >
                       {renderTimeSelect(((dataColeta === '') ? undefined : dataColeta), 'Coleta')}
@@ -454,7 +672,7 @@ const Index = () => {
                         value={dataEntrega}
                         onBlur={handleDataEntrega}
                         autoComplete="off"
-                        invalid={dataEntregaValidation}
+                        invalid={trySubmit && !dataEntrega.trim()}
                         invalidText="Faltou a data !"
                       />
                     </DatePicker>
@@ -466,7 +684,7 @@ const Index = () => {
                       style={{ maxWidth: 160 }}
                       onChange={handleHoraEntrega}
                       value={horaEntrega}
-                      invalid={horaEntregaValidation}
+                      invalid={trySubmit && !horaEntrega.trim()}
                       invalidText="Faltou o horário !"
                     >
                       {renderTimeSelect(((dataEntrega === '') ? undefined : dataEntrega), 'Entrega')}
@@ -475,7 +693,7 @@ const Index = () => {
                 </Row>
                 <Row style={{ marginTop: 10 }}>
                   <Column sm={12} md={4} lg={6}>
-                    <Button style={{ maxWidth: 100 }} onClick={handleSubmit}>
+                    <Button style={{ maxWidth: 100 }} onClick={handleAgendamento}>
                       Alugar
                     </Button>
                   </Column>
@@ -485,6 +703,17 @@ const Index = () => {
                     </Button>
                   </Column>
                 </Row>
+                {agendamentoValidation
+                && (
+                <InlineNotification
+                  title="Houve um problema ao realizar o agendamento."
+                  subtitle="Nosso suporte está verificando."
+                  kind="error"
+                  iconDescription="closes notification"
+                  lowContrast
+                  hideCloseButton
+                />
+                )}
               </>
             )
           }
