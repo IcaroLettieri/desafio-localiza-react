@@ -3,4 +3,47 @@
   background-color: #379849;
   position: sticky;
   margin-bottom: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.buttonPrimary {
+  padding: 0;
+  text-align: center;
+  background-color: #379849;
+  color: #d4db26;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 165px;
+}
+
+.buttonPrimary span {
+  width: 100%;
+}
+
+.buttonPrimary:hover {
+  opacity: 0.9;
+  background-color: #379849;
+  color: #d4db26;
+}
+
+
+.buttonLoginLogout {
+  padding: 0;
+  text-align: center;
+  background-color: #379849;
+  color: #d4db26;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 90px;
+}
+
+.buttonLoginLogout span {
+  width: 100%;
+}
+
+.buttonLoginLogout:hover {
+  opacity: 0.9;
+  background-color: #379849;
+  color: #d4db26;
 }
