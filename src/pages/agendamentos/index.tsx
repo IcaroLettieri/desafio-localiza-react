@@ -22,7 +22,7 @@ const agendamentos = () => {
     <div className={styles.container}>
       <Grid>
         {agendamentosArray?.map((agendamento) => (
-          <Row>
+          <Row style={{ maxWidth: 720 }}>
             <Agendamento {...agendamento} />
           </Row>
         ))}
