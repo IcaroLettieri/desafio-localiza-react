@@ -6,6 +6,8 @@ import {
 } from 'carbon-components-react';
 import { cpf as CpfValidator } from 'cpf-cnpj-validator';
 
+import styles from './styles/Index.module.scss';
+
 import {
   getCepInformacoes, getVeiculos, postAgendar, postCadastrar, postLogin,
 } from '../adapters/xhr';
@@ -386,9 +388,9 @@ const Index = () => {
         />
 
         <Button
-          kind="secondary"
+          className={styles.buttonSecondary}
           onClick={loadViaCep}
-        >Buscar CEP
+        ><span>Buscar CEP</span>
         </Button>
 
         <TextInput
@@ -491,14 +493,14 @@ const Index = () => {
       </ModalBody>
       <ModalFooter>
         <Button
-          kind="secondary"
+          className={styles.buttonSecondary}
           onClick={() => { setOpenModalRegister(false); }}
-        >Cancelar
+        ><span>Cancelar</span>
         </Button>
         <Button
-          kind="primary"
+          className={styles.buttonPrimary}
           onClick={handleRegister}
-        >Cadastrar
+        ><span>Cadastrar</span>
         </Button>
       </ModalFooter>
     </ComposedModal>
@@ -548,14 +550,14 @@ const Index = () => {
       </ModalBody>
       <ModalFooter>
         <Button
-          kind="secondary"
+          className={styles.buttonSecondary}
           onClick={() => { setOpenModalLogin(false); }}
-        >Cancelar
+        ><span>Cancelar</span>
         </Button>
         <Button
-          kind="primary"
+          className={styles.buttonPrimary}
           onClick={handleLogin}
-        >Entrar
+        ><span>Entrar</span>
         </Button>
       </ModalFooter>
     </ComposedModal>
@@ -566,7 +568,11 @@ const Index = () => {
       <ModalHeader style={{ padding: 65 }}>
         <h4>{messageModal}</h4>
       </ModalHeader>
-      <ModalFooter secondaryButtonText="Fechar" />
+      <ModalFooter>
+        <Button className={styles.buttonSecondary} onClick={() => setOpenModalMessage(false)}>
+          <span>Fechar</span>
+        </Button>
+      </ModalFooter>
     </ComposedModal>
   );
 
@@ -693,13 +699,13 @@ const Index = () => {
                 </Row>
                 <Row style={{ marginTop: 10 }}>
                   <Column sm={12} md={4} lg={6}>
-                    <Button style={{ maxWidth: 100 }} onClick={handleAgendamento}>
-                      Alugar
+                    <Button className={styles.buttonPrimary} onClick={handleAgendamento}>
+                      <span>Alugar</span>
                     </Button>
                   </Column>
                   <Column sm={12} md={4} lg={6}>
-                    <Button kind="secondary" style={{ maxWidth: 100 }} onClick={handleCancelSelectCar}>
-                      Cancelar
+                    <Button className={styles.buttonSecondary} onClick={handleCancelSelectCar}>
+                      <span>Cancelar</span>
                     </Button>
                   </Column>
                 </Row>
