@@ -3,6 +3,7 @@ import ICategoria from './IVeiculoCategoria';
 
 interface IVeiculo {
   id: number;
+  img: string;
   modelo: string;
   marca: string;
   placa: string;
