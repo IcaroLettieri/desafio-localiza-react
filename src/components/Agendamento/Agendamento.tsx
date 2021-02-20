@@ -1,7 +1,4 @@
-import {
-  Button, Tag, Tile, Tooltip,
-  Grid, Row,
-} from 'carbon-components-react';
+import { Tile, Grid, Row } from 'carbon-components-react';
 import IAgendamento from '../../types/IAgendamento';
 import formatCurrency from '../../utils/formatCurrency';
 import formatDate from '../../utils/formatDate';
@@ -20,7 +17,6 @@ const Agendamento = ({
   CustosAdicional,
   ValorTotal,
   RealizadaVistoria,
-  OperadorId,
   Veiculo,
   Checklist: {
     CarroLimpo,
@@ -65,21 +61,19 @@ const Agendamento = ({
         </Row>
         <Row>
           <Tile>
-            <span>ValorHora:</span>
+            <span>Valor/Hora:</span>
             {formatCurrency(ValorHora)}
           </Tile>
           <Tile>
-            <span> Horas Locacao:</span>
+            <span>Horas Locação:</span>
             { HorasLocacao } { HorasLocacao > 1 ? 'horas' : 'hora'}
           </Tile>
-        </Row>
-        <Row>
           <Tile>
-            <span>SubTotal:</span>
+            <span>Sub Total:</span>
             {formatCurrency(SubTotal)}
           </Tile>
           <Tile>
-            <span>CustosAdicional:</span>
+            <span>Custos Adicional:</span>
             {formatCurrency(CustosAdicional)}
           </Tile>
           <Tile>
@@ -92,10 +86,10 @@ const Agendamento = ({
             <span>Realizada Vistoria:</span>
             {RealizadaVistoria ? 'Sim' : 'Não'}
           </Tile>
-          <Tile>
+          {/* <Tile>
             <span> Operador Id:</span>
             { OperadorId }
-          </Tile>
+          </Tile> */}
 
           <Tile>
             <span> Carro Limpo:</span>
