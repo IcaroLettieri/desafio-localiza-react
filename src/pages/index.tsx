@@ -157,45 +157,45 @@ const Index = () => {
       failValidation = true;
     }
 
-    if (failValidation) {
-      toggleModalMessage('Necessário preencher os campos de formulário.');
-    } else if (!isAuthenticated()) {
-      setTrySubmit(false);
-      setOpenModalLogin(true);
-    } else {
-      const DataRetirada = new Date(
-        Number(dataColeta.slice(6, 10)),
-        (Number(dataColeta.slice(3, 5)) - 1),
-        Number(dataColeta.slice(0, 2)),
-        Number(horaColeta.slice(0, 2)),
-        Number(horaColeta.slice(3, 5)),
-      );
-
-      const DataDevolucao = new Date(
-        Number(dataEntrega.slice(6, 10)),
-        (Number(dataEntrega.slice(3, 5)) - 1),
-        Number(dataEntrega.slice(0, 2)),
-        Number(horaEntrega.slice(0, 2)),
-        Number(horaEntrega.slice(3, 5)),
-      );
-
-      const data:IAgenda = {
-        VeiculoId: veiculoSelecionado.id,
-        UsuarioId: Number(getUserId()),
-        OperadorId: 1,
-        DataRetirada,
-        DataDevolucao,
-      };
-
-      const response = await postAgendar(data);
-
-      if (response.status === 200) {
-        toggleModalMessage('Locação agendada com sucesso !');
-        handleCancelSelectCar();
+    if (!failValidation) {
+      if (!isAuthenticated() && !failValidation) {
         setTrySubmit(false);
-        setAgendamentoValidation(false);
+        setOpenModalLogin(true);
       } else {
-        setAgendamentoValidation(true);
+        const DataRetirada = new Date(
+          Number(dataColeta.slice(6, 10)),
+          (Number(dataColeta.slice(3, 5)) - 1),
+          Number(dataColeta.slice(0, 2)),
+          Number(horaColeta.slice(0, 2)),
+          Number(horaColeta.slice(3, 5)),
+        );
+
+        const DataDevolucao = new Date(
+          Number(dataEntrega.slice(6, 10)),
+          (Number(dataEntrega.slice(3, 5)) - 1),
+          Number(dataEntrega.slice(0, 2)),
+          Number(horaEntrega.slice(0, 2)),
+          Number(horaEntrega.slice(3, 5)),
+        );
+
+        const data:IAgenda = {
+          VeiculoId: veiculoSelecionado.id,
+          UsuarioId: Number(getUserId()),
+          OperadorId: 1,
+          DataRetirada,
+          DataDevolucao,
+        };
+
+        const response = await postAgendar(data);
+
+        if (response.status === 200) {
+          toggleModalMessage('Locação agendada com sucesso !');
+          handleCancelSelectCar();
+          setTrySubmit(false);
+          setAgendamentoValidation(false);
+        } else {
+          setAgendamentoValidation(true);
+        }
       }
     }
   };
