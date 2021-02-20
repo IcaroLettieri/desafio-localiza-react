@@ -1,12 +1,14 @@
 import axios from 'axios';
 import ICepInformacoes from '../../types/ICepInformacoes';
 import IVeiculo from '../../types/IVeiculo';
+import IAgendamento from '../../types/IAgendamento';
 
 export const getCepInformacoes = (cep: string) => axios.get<ICepInformacoes>(`http://viacep.com.br/ws/${cep}/json/`);
 
 export const api = axios.create({ baseURL: '/api', timeout: 5000 });
 
 export const getVeiculos = () => api.get<IVeiculo[]>('/veiculos');
+export const getAgendamentos = () => api.get<IAgendamento[]>('/agendamentos');
 
 export const postAgendar = ({
   VeiculoId,
