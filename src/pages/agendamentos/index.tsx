@@ -2,20 +2,27 @@ import {
   Row, Grid,
 } from 'carbon-components-react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import styles from './styles/Agendamentos.module.css';
 import IAgendamento from '../../types/IAgendamento';
 import { getAgendamentos } from '../../adapters/xhr';
 import Agendamento from '../../components/Agendamento/Agendamento';
+import { isAuthenticated } from '../../services/auth';
 
 const agendamentos = () => {
   const [agendamentosArray, setAgendamentosArray] = useState<IAgendamento[]>();
+  const router = useRouter();
 
   useEffect(() => {
-    getAgendamentos()
-      .then((response) => {
-        setAgendamentosArray(response.data);
-      });
+    if (!isAuthenticated()) {
+      router.push('/');
+    } else {
+      getAgendamentos()
+        .then((response) => {
+          setAgendamentosArray(response.data);
+        });
+    }
   }, []);
 
   return (
