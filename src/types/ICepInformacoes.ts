@@ -1,4 +1,5 @@
 interface ICepInformacoes {
+  erro?: boolean;
   cep: string;
   logradouro: string;
   uf: string;
