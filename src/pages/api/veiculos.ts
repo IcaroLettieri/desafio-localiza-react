@@ -6,6 +6,7 @@ type Categoria = 'Básico' | 'Completo' | 'Luxo';
 
 interface IVeiculo {
   id: number;
+  img: string;
   modelo: string;
   marca: string;
   placa: string;
@@ -24,6 +25,7 @@ const handler = (_, response: NowResponse) => {
   for (let i = 1; i < 101; i++) {
     veiculos.push({
       id: i,
+      img: `cars/${faker.random.number({ min: 1, max: 10 })}.png`,
       modelo: faker.vehicle.model(),
       marca: faker.vehicle.manufacturer(),
       placa: faker.vehicle.vin(),
