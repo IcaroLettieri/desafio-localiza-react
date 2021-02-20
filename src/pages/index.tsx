@@ -719,20 +719,26 @@ const Index = () => {
           }
         </Column>
         <Column>
-          {
+          <Row narrow>
+            {
+
             !veiculosFiltrados
               ? <Loading id="veiculos" />
               // eslint-disable-next-line max-len
+
               : veiculosFiltrados.map((veiculo) => (
-                <Row key={veiculo.id}>
-                  <Veiculo
-                    {...veiculo}
-                    handleSelectCar={() => handleSelectCar(veiculo)}
-                    veiculoSelecionado={veiculoSelecionado}
-                  />
-                </Row>
+
+                <Veiculo
+                  key={veiculo.id}
+                  {...veiculo}
+                  handleSelectCar={() => handleSelectCar(veiculo)}
+                  veiculoSelecionado={veiculoSelecionado}
+                />
+
               ))
+
           }
+          </Row>
         </Column>
       </Row>
     </Grid>

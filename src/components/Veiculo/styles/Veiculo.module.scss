@@ -1,21 +1,21 @@
 .veiculo {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  width: 100%;
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
+  padding: 16px 8px;
+  margin: 5px;
+  width: 300px;
+  height: fit-content;
+  border: 1px solid #d3d3d3;
+  border-radius: 6px;
+  min-height: 340px;
 }
 
 .veiculo img {
   width: 100%;
-  height: auto;
-  object-fit: fill;
 }
 
 .modelo {
   font-size: 1.5rem;
   font-weight: bold;
+  text-align: center;
 }
 
 .valorHora {
@@ -30,15 +30,17 @@
 
 .veiculoDados {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 1em;
 }
 
-.veiculoMeta > div {
-  width: 100%;
+.title {
+  font-weight: bold;
+  color: #379849;
+  font-size: 14px;
+  letter-spacing: 0.35px;
+  text-align: center;
 }
 
 .veiculoMeta span {
@@ -49,15 +51,23 @@
   margin-bottom: 0.5em;
 }
 
-.button {
-  text-align: right;
+.button button {
+  padding: 0;
+  text-align: center;
+  background-color: #d4db26;
+  color: #004a34;
+  border-radius: 4px;
+  width: 100%;
 }
 
-.veiculoMeta {
-  display: flex;
-  gap: 1em;
-  justify-content: space-between;
-  flex-direction: column;
+.button button span {
+  width: 100%;
+}
+
+.button button:hover {
+  opacity: 0.9;
+  background-color: #d4db26;
+  color: #004a34;
 }
 
 @media (min-width: 720px) {

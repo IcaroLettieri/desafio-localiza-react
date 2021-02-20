@@ -1,5 +1,5 @@
 import {
-  Button, Tag, Tile, Tooltip,
+  Button, Tag, Tile, Tooltip, Accordion, AccordionItem,
 } from 'carbon-components-react';
 import IVeiculo from '../../types/IVeiculo';
 import formatCurrency from '../../utils/formatCurrency';
@@ -7,6 +7,7 @@ import styles from './styles/Veiculo.module.scss';
 
 const Veiculo = ({
   id,
+  img,
   capacidadePortaMalas,
   capacidadeTanque,
   categoria,
@@ -18,34 +19,40 @@ const Veiculo = ({
   handleSelectCar,
   veiculoSelecionado,
 }: IVeiculo) => (
-  <Tile className={styles.veiculo} key={id}>
+  <div className={styles.veiculo} key={id}>
     <div className={styles.image}>
-      <img src="https://placehold.it/300" alt={modelo} />
+      <img src={img} alt={modelo} />
     </div>
     <div className={styles.veiculoDados}>
       <h3 className={styles.modelo}>
         {marca} {modelo}
       </h3>
+      <Accordion className={styles.accordion}>
+        <AccordionItem title={<span className={styles.title}>Detalhes</span>}>
+          <div className={styles.veiculoMeta}>
+            <div>
+              <span>Categoria:</span>
+              {categoria}
+            </div>
+            <br />
+            <div>
+              <span>Porta-malas:</span>
+              {`${capacidadePortaMalas} litros`}
+            </div>
+            <br />
+            <div>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                Combustível
+                <Tooltip>
+                  Capacidade do tanque: {capacidadeTanque} litros
+                </Tooltip>
+              </span>
+              {combustivel}
+            </div>
+          </div>
+        </AccordionItem>
+      </Accordion>
 
-      <div className={styles.veiculoMeta}>
-        <Tile>
-          <span>Categoria:</span>
-          {categoria}
-        </Tile>
-        <Tile>
-          <span>Porta-malas:</span>
-          {`${capacidadePortaMalas} litros`}
-        </Tile>
-        <Tile>
-          <span>
-            Combustível
-            <Tooltip>
-              Capacidade do tanque: {capacidadeTanque} litros
-            </Tooltip>
-          </span>
-          {combustivel}
-        </Tile>
-      </div>
       <div className={styles.button}>
         {(!veiculoSelecionado)
           ? (
@@ -62,7 +69,7 @@ const Veiculo = ({
           )}
       </div>
     </div>
-  </Tile>
+  </div>
 );
 
 export default Veiculo;
