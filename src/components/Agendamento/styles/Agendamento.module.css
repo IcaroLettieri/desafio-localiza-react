@@ -1,10 +1,10 @@
 .veiculo {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  width: 100%;
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
+  padding: 16px 8px;
+  margin: 5px;
+  width: 720px;
+  height: fit-content;
+  border: 1px solid #d3d3d3;
+  border-radius: 6px;
 }
 
 .veiculo img {
@@ -13,8 +13,16 @@
   object-fit: fill;
 }
 
+.title {
+  font-weight: bold;
+  color: #379849;
+  font-size: 14px;
+  letter-spacing: 0.35px;
+  text-align: center;
+}
+
 .modelo {
-  font-size: 1.5rem;
+  font-size: 1.05rem;
   font-weight: bold;
 }
 

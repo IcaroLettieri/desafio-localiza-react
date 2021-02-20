@@ -27,7 +27,9 @@ const agendamentos = () => {
 
   return (
     <div className={styles.container}>
+
       <Grid>
+        <h3 className={styles.title}>Agendamentos</h3>
         {agendamentosArray?.map((agendamento) => (
           <Row style={{ maxWidth: 720 }}>
             <Agendamento {...agendamento} />
