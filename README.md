@@ -5,6 +5,10 @@ Desafio Gama Academy - Back-end .NET
 
 - Grupo Front-end: [Erick Santos](https://github.com/erickhs321 "Erick Santos") e [Icaro Lettieri](https://github.com/icarolettieri "Icaro Lettieri")
 
+- Live: [Vercel](https://desafio-localiza-react-zeta.vercel.app/ "Vercel")
+
+- Github Back-end: [Back-end](https://github.com/vianaerica/locacao-veiculos "Back-end")
+
 ------------
 
 
