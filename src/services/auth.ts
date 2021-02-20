@@ -2,7 +2,7 @@ export const TOKEN_KEY = '@localiza-Token';
 export const USER_ID = '@localiza-UserID';
 export const USER_NAME = '@localiza-UserName';
 
-export const isAuthenticated = () => localStorage.getItem(TOKEN_KEY) !== null;
+export const isAuthenticated = () => (typeof window !== 'undefined' && localStorage.getItem(TOKEN_KEY)) !== null;
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const getUserId = () => localStorage.getItem(USER_ID);
 export const getUserName = () => localStorage.getItem(USER_NAME);
